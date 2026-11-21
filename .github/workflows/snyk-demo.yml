@@ -1,0 +1,28 @@
+name: Snyk Security Demo
+
+on:
+  push:
+    branches:
+      - main
+      - "demo/**"
+      - "security/**"
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  snyk-open-source:
+    name: Snyk Open Source
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Run Snyk Open Source scan
+        uses: snyk/actions/node@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
